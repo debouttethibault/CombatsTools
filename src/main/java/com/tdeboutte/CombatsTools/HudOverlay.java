@@ -86,22 +86,21 @@ public class HudOverlay extends GuiComponent implements IIngameOverlay {
         final Player player = mc.player;
         assert (player != null);
 
-        int xPos = mc.getWindow().getGuiScaledWidth() / 2;
-
         RenderSystem.enableBlend();
 
-        //                        x,     height,      width,         y,              color
-        fill(matrixStack, 2, 12, 140, 2, 0x3f000000);
-        fill(matrixStack, 2, 12, 40, 14, 0x3f000000);
-
+        // Draw player direction
         float yaw = Mth.lerp(partialTicks, player.yHeadRotO, player.yHeadRot) % 360;
         if (yaw < 0) yaw += 360;
-        drawPlayerDirection(matrixStack, yaw);
+        String dir = getPlayerDirectionString(yaw);
+        drawString(matrixStack, font, dir, 3, 13, 0xffffffff);
 
+        // Draw player coordinates
         double playerPosX = Mth.lerp(partialTicks, player.xo, player.getX());
         double playerPosY = Mth.lerp(partialTicks, player.yo, player.getY());
         double playerPosZ = Mth.lerp(partialTicks, player.zo, player.getZ());
-        drawPlayerCoordinates(matrixStack, playerPosX, playerPosY, playerPosZ);
+        String pos = String.format("XYZ: %4.1f / %4.1f / %4.1f", playerPosX, playerPosY, playerPosZ);
+        // fill(matrixStack, 2, 12, font.width(pos) + 4, 2, 0x3f000000);
+        drawString(matrixStack, font, pos, 3, 3, 0xffffffff);
     }
 
     private boolean canRender() {
@@ -113,7 +112,8 @@ public class HudOverlay extends GuiComponent implements IIngameOverlay {
         return true;
     }
 
-    private void drawPlayerDirection(PoseStack matrixStack, float yaw) {
+    private static String getPlayerDirectionString(float yaw) {
+        // Find a way to make this better, maybe show compass?
         String dir;
         if (yaw > 337.5f || yaw <= 22.5f) {
             dir = "N ";
@@ -133,12 +133,6 @@ public class HudOverlay extends GuiComponent implements IIngameOverlay {
             dir = "NW";
         }
         dir += String.format(" (%d°)", Mth.fastFloor(yaw));
-
-        // drawString(matrixStack, font, dir, 2, 2, 0xffffffff);
-    }
-
-    private void drawPlayerCoordinates(PoseStack matrixStack, double x, double y, double z) {
-        String pos = String.format("XYZ: %4.1f / %4.1f / %4.1f", x, y, z);
-        drawString(matrixStack, font, pos, 3, 3, 0xffffffff);
+        return dir;
     }
 }
