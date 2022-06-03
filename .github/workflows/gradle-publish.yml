@@ -1,8 +1,10 @@
 name: JAR Package
 
 on:
-  release:
-    types: [created]
+  push:
+    branches:    
+      - 'main'
+      - 'releases/**'
 
 jobs:
   build:
