@@ -16,6 +16,13 @@ jobs:
       packages: write
 
     steps:
+    - name: Declare some variables
+      id: vars
+      shell: bash
+      run: |
+        echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
     - uses: actions/checkout@v3
     - name: Set up JDK 17
       uses: actions/setup-java@v3
@@ -33,7 +40,7 @@ jobs:
     - name: Publish to GitHub Packages
       uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
       with:
-        arguments: -Pversion=$(git rev-parse --short HEAD) publish
+        arguments: -Pversion=${{ steps.vars.outputs.sha_short }} publish
       env:
         USERNAME: ${{ github.actor }}
         TOKEN: ${{ secrets.GITHUB_TOKEN }}
