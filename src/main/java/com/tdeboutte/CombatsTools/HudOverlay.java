@@ -94,6 +94,9 @@ public class HudOverlay extends GuiComponent implements IIngameOverlay {
         String dir = getPlayerDirectionString(yaw);
         drawString(matrixStack, font, dir, 3, 13, 0xffffffff);
 
+        // Draw FPS
+        // drawString(matrixStack, font, "FPS: " + mc.fpsString.substring(0, mc.fpsString.indexOf(' ')), 3, 23, 0xffffffff);
+
         // Draw player coordinates
         double playerPosX = Mth.lerp(partialTicks, player.xo, player.getX());
         double playerPosY = Mth.lerp(partialTicks, player.yo, player.getY());
