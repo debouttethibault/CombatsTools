@@ -1,25 +1,15 @@
 package com.tdeboutte.CombatsTools;
 
 import com.mojang.logging.LogUtils;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.*;
-import net.minecraftforge.event.server.ServerStartingEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
-
-import java.util.stream.Collectors;
 
 @Mod(CombatsTools.MODID)
 public class CombatsTools {
@@ -43,6 +33,7 @@ public class CombatsTools {
     }
 
     private void loadComplete(FMLLoadCompleteEvent event) {
+        //noinspection deprecation
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
             ClientHandler.initKeybinds();
             HudOverlay.init();
