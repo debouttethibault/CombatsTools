@@ -45,6 +45,9 @@ public class WaypointSaveScreen extends Screen {
         editBoxName.setValue(getInitialName());
         this.addRenderableWidget(editBoxName);
 
+        Button clearButton = new Button(width_div_2 + 82, this.height / 2 - 35, 18, 18, Component.literal("X"), this::onPressClear);
+        this.addRenderableWidget(clearButton);
+
         // x y width height
         EditBox editBoxX = new EditBox(font, width_div_2 - 100, this.height / 2 - 9, 61, 18, Component.literal("X"));
         EditBox editBoxY = new EditBox(font, width_div_2 - 32, this.height / 2 - 9, 62, 18, Component.literal("Y"));
@@ -89,6 +92,11 @@ public class WaypointSaveScreen extends Screen {
 
     private void onPressClose(@NonNull Button closeButton) {
         close();
+    }
+
+    private void onPressClear(@NonNull Button clearButton) {
+        assert editBoxName != null;
+        editBoxName.setValue("");
     }
 
     private void close() {
