@@ -2,6 +2,8 @@ package com.tdeboutte.CombatsTools;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.logging.LogUtils;
+import com.tdeboutte.CombatsTools.waypoints.WaypointDatabase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
@@ -15,6 +17,7 @@ import net.minecraftforge.client.gui.OverlayRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.slf4j.Logger;
 
 public class HudOverlay extends GuiComponent implements IIngameOverlay {
     private final static HudOverlay INSTANCE = new HudOverlay();
@@ -101,10 +104,10 @@ public class HudOverlay extends GuiComponent implements IIngameOverlay {
         // drawString(matrixStack, font, "FPS: " + mc.fpsString.substring(0, mc.fpsString.indexOf(' ')), 3, 23, 0xffffffff);
 
         // Draw player coordinates
-        double playerPosX = Mth.lerp(partialTicks, player.xo, player.getX());
-        double playerPosY = Mth.lerp(partialTicks, player.yo, player.getY());
-        double playerPosZ = Mth.lerp(partialTicks, player.zo, player.getZ());
-        String pos = String.format("XYZ: %4.1f / %4.1f / %4.1f", playerPosX, playerPosY, playerPosZ);
+        int playerPosX = player.getBlockX();
+        int playerPosY = player.getBlockY();
+        int playerPosZ = player.getBlockZ();
+        String pos = String.format("XYZ: %d / %d / %d", playerPosX, playerPosY, playerPosZ);
         // fill(matrixStack, 2, 12, font.width(pos) + 4, 2, 0x3f000000);
         drawString(matrixStack, font, pos, 3, 3, 0xffffffff);
     }
