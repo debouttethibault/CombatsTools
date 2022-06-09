@@ -18,10 +18,12 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class HudOverlay extends GuiComponent implements IIngameOverlay {
     private final static HudOverlay INSTANCE = new HudOverlay();
+    private final static Logger LOGGER = LogUtils.getLogger();
 
     private final Minecraft mc;
     private final Font font;
     private final TextureManager textureManager;
+    private final WaypointDatabase waypointDatabase;
 
     private boolean needsPop = false;
 
@@ -33,6 +35,7 @@ public class HudOverlay extends GuiComponent implements IIngameOverlay {
         this.mc = Minecraft.getInstance();
         this.font = mc.font;
         this.textureManager = mc.textureManager;
+        this.waypointDatabase = WaypointDatabase.getInstance();
 
         OverlayRegistry.registerOverlayBelow(ForgeIngameGui.BOSS_HEALTH_ELEMENT, "Combat's Tools", this);
     }

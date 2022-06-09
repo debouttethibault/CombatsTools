@@ -68,7 +68,7 @@ public class WaypointsListWidget extends ObjectSelectionList<WaypointsListWidget
 
     public void refreshList() {
         this.clearEntries();
-        WaypointDatabase.getWaypoints().values().stream()
+        WaypointDatabase.getInstance().getWaypointsStream()
                 .map((wp) -> new WaypointsListEntry(wp, this)).forEach(this::addEntry);
     }
 

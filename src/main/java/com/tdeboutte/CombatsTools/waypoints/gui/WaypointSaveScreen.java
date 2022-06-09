@@ -83,7 +83,7 @@ public class WaypointSaveScreen extends Screen {
             return;
 
         final String name = editBoxName.getValue().trim();
-        if (WaypointDatabase.add(this.x, this.y, this.z, this.dimension, name))
+        if (WaypointDatabase.getInstance().add(this.x, this.y, this.z, this.dimension, name))
             close();
     }
 
