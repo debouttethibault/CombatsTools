@@ -2,12 +2,12 @@ package com.tdeboutte.CombatsTools.waypoints.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
 public class WaypointsListScreen extends Screen {
     public WaypointsListScreen() {
-        super(new TextComponent("Waypoints"));
+        super(Component.literal("Waypoints"));
     }
 
     @Override

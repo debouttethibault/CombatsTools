@@ -6,14 +6,12 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.network.chat.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.function.BiFunction;
 
 public class WaypointSaveScreen extends Screen {
 
@@ -26,7 +24,7 @@ public class WaypointSaveScreen extends Screen {
     private EditBox editBoxName;
 
     public WaypointSaveScreen(int x, int y, int z, @NonNull String dimension) {
-        super(new TextComponent("Save waypoint"));
+        super(Component.literal("Save waypoint"));
 
         this.x = x;
         this.y = y;
@@ -43,14 +41,14 @@ public class WaypointSaveScreen extends Screen {
 
         int width_div_2 = this.width / 2;
 
-        editBoxName = new EditBox(font, width_div_2 - 100, this.height / 2 - 35, 200, 18, new TextComponent("Name"));
+        editBoxName = new EditBox(font, width_div_2 - 100, this.height / 2 - 35, 174, 18, Component.literal("Name"));
         editBoxName.setValue(getInitialName());
         this.addRenderableWidget(editBoxName);
 
         // x y width height
-        EditBox editBoxX = new EditBox(font, width_div_2 - 100, this.height / 2 - 9, 61, 18, new TextComponent("X"));
-        EditBox editBoxY = new EditBox(font, width_div_2 - 32, this.height / 2 - 9, 62, 18, new TextComponent("Y"));
-        EditBox editBoxZ = new EditBox(font, width_div_2 + 39, this.height / 2 - 9, 61, 18, new TextComponent("Z"));
+        EditBox editBoxX = new EditBox(font, width_div_2 - 100, this.height / 2 - 9, 61, 18, Component.literal("X"));
+        EditBox editBoxY = new EditBox(font, width_div_2 - 32, this.height / 2 - 9, 62, 18, Component.literal("Y"));
+        EditBox editBoxZ = new EditBox(font, width_div_2 + 39, this.height / 2 - 9, 61, 18, Component.literal("Z"));
         editBoxX.setValue(String.valueOf(x));
         editBoxY.setValue(String.valueOf(y));
         editBoxZ.setValue(String.valueOf(z));
@@ -61,10 +59,10 @@ public class WaypointSaveScreen extends Screen {
         this.addRenderableWidget(editBoxY);
         this.addRenderableWidget(editBoxZ);
 
-        Button saveButton = new Button(width_div_2 - 102, this.height / 2 + 17, 98, 20, new TextComponent("Save"), this::onPressSave);
+        Button saveButton = new Button(width_div_2 - 102, this.height / 2 + 17, 98, 20, Component.literal("Save"), this::onPressSave);
         this.addRenderableWidget(saveButton);
 
-        Button closeButton = new Button(width_div_2 + 4, this.height / 2 + 17, 98, 20, new TextComponent("Cancel"), this::onPressClose);
+        Button closeButton = new Button(width_div_2 + 4, this.height / 2 + 17, 98, 20, Component.literal("Cancel"), this::onPressClose);
         this.addRenderableWidget(closeButton);
     }
 

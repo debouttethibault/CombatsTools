@@ -9,8 +9,6 @@ import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,13 +28,13 @@ public class WaypointsListWidget extends ObjectSelectionList<WaypointsListWidget
 
         @Override
         public @NotNull Component getNarration() {
-            return new TranslatableComponent("narrator.select", waypoint.name);
+            return Component.translatable("narrator.select", waypoint.name);
         }
 
         @Override
         public void render(@NotNull PoseStack matrixStack, int entryIdx, int top, int left, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean p_194999_5_, float partialTick) {
-            Component name = new TextComponent(waypoint.name);
-            Component coords = new TextComponent(String.format("%s - %d / %d / %d", waypoint.dimension, waypoint.x, waypoint.y, waypoint.z));
+            Component name = Component.literal(waypoint.name);
+            Component coords = Component.literal(String.format("%s - %d / %d / %d", waypoint.dimension, waypoint.x, waypoint.y, waypoint.z));
 
             font.draw(matrixStack, Language.getInstance().getVisualOrder(FormattedText.composite(font.substrByWidth(name, listWidth))), left + 3, top + 2, 0xFFFFFF);
         }

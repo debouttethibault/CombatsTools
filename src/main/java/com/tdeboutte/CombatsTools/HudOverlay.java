@@ -40,7 +40,7 @@ public class HudOverlay extends GuiComponent implements IIngameOverlay {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void preOverlayHigh(RenderGameOverlayEvent.PreLayer event) {
         if (event.getOverlay() == ForgeIngameGui.BOSS_HEALTH_ELEMENT && !mc.options.hideGui && canRender()) {
-            PoseStack matrixStack = event.getMatrixStack();
+            PoseStack matrixStack = event.getPoseStack();
             matrixStack.pushPose();
             matrixStack.translate(0, 28, 0);
             needsPop = true;
@@ -59,7 +59,7 @@ public class HudOverlay extends GuiComponent implements IIngameOverlay {
     public void postOverlay(RenderGameOverlayEvent.PostLayer event)
     {
         if (event.getOverlay() == ForgeIngameGui.BOSS_HEALTH_ELEMENT && needsPop) {
-            event.getMatrixStack().popPose();
+            event.getPoseStack().popPose();
             needsPop = false;
         }
     }
@@ -68,7 +68,7 @@ public class HudOverlay extends GuiComponent implements IIngameOverlay {
     public void postOverlay(RenderGameOverlayEvent.Post event)
     {
         if (event.getType() == RenderGameOverlayEvent.ElementType.ALL && needsPop) {
-            PoseStack matrixStack = event.getMatrixStack();
+            PoseStack matrixStack = event.getPoseStack();
             matrixStack.popPose();
             needsPop = false;
         }
