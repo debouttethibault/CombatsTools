@@ -5,6 +5,8 @@ import com.tdeboutte.CombatsTools.waypoints.gui.WaypointSaveScreen;
 import com.tdeboutte.CombatsTools.waypoints.gui.WaypointsListScreen;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -14,11 +16,13 @@ import org.apache.logging.log4j.Logger;
 public class ClientHandler {
     private static final Logger LOGGER = LogManager.getLogger();
 
+    private static Minecraft mc;
     private static KeyMapping keyAddWaypoint;
     private static KeyMapping keyListWaypoints;
 
     public static void init() {
-//        MinecraftForge.EVENT_BUS.addListener(ClientHandler::clientTickEvent);
+        mc = Minecraft.getInstance();
+        MinecraftForge.EVENT_BUS.addListener(ClientHandler::clientTickEvent);
     }
 
     public static void initKeybinds() {
@@ -30,12 +34,17 @@ public class ClientHandler {
         MinecraftForge.EVENT_BUS.addListener(ClientHandler::handleKeys);
     }
 
-//    private static void clientTickEvent(TickEvent.ClientTickEvent event) {
-//        LocalPlayer player = Minecraft.getInstance().player;
-//        if (player != null) {
-//            // POIs.onTick(player);
-//        }
-//    }
+    private static void clientTickEvent(TickEvent.ClientTickEvent event) {
+        LocalPlayer player = mc.player;
+        if (player != null ) {
+            // Auto climb ladder
+            if (player.onClimbable() && !player.isSuppressingSlidingDownLadder() && player.getXRot() <= -50f) {
+                player.resetFallDistance();
+                Vec3 motion = player.getDeltaMovement();
+                player.setDeltaMovement(motion.x, player.getSpeed(), motion.z);
+            }
+        }
+    }
 
     private static void handleKeys(TickEvent.ClientTickEvent event) {
         Minecraft mc = Minecraft.getInstance();
