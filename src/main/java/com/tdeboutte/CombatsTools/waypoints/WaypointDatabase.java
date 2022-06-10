@@ -2,7 +2,8 @@ package com.tdeboutte.CombatsTools.waypoints;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -13,11 +14,14 @@ public class WaypointDatabase {
 
     private final Map<String, Waypoint> waypoints;
 
+    @Nullable
+    public Waypoint waypointToTrack;
+
     private WaypointDatabase() {
         waypoints = new TreeMap<>();
     }
 
-    public boolean edit(int x, int y, int z, @NonNull String dimension, @NonNull String name, @NonNull String oldKey) {
+    public boolean edit(int x, int y, int z, @NotNull String dimension, @NotNull String name, @NotNull String oldKey) {
         final String newKey = name.trim().toLowerCase(Locale.ROOT);
         if (!waypoints.containsKey(oldKey) || waypoints.containsKey(newKey))
             return false;
@@ -25,7 +29,7 @@ public class WaypointDatabase {
         return save(new Waypoint(x, y, z, dimension, name));
     }
 
-    public boolean add(int x, int y, int z, @NonNull String dimension, @NonNull String name) {
+    public boolean add(int x, int y, int z, @NotNull String dimension, @NotNull String name) {
         return save(new Waypoint(x, y, z, dimension, name));
     }
 
@@ -33,6 +37,9 @@ public class WaypointDatabase {
         final String key = waypoint.name.trim().toLowerCase(Locale.ROOT);
         if (waypoints.containsKey(key))
             return false;
+
+        this.waypointToTrack = waypoint;
+
         waypoints.put(key, waypoint);
         return true;
     }

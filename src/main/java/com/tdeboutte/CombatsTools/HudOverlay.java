@@ -3,6 +3,7 @@ package com.tdeboutte.CombatsTools;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.logging.LogUtils;
+import com.tdeboutte.CombatsTools.waypoints.Waypoint;
 import com.tdeboutte.CombatsTools.waypoints.WaypointDatabase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -46,9 +47,9 @@ public class HudOverlay extends GuiComponent implements IIngameOverlay {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void preOverlayHigh(RenderGameOverlayEvent.PreLayer event) {
         if (event.getOverlay() == ForgeIngameGui.BOSS_HEALTH_ELEMENT && !mc.options.hideGui && canRender()) {
-            PoseStack matrixStack = event.getPoseStack();
-            matrixStack.pushPose();
-            matrixStack.translate(0, 28, 0);
+            PoseStack poseStack = event.getPoseStack();
+            poseStack.pushPose();
+            poseStack.translate(0, 28, 0);
             needsPop = true;
         }
     }
@@ -74,14 +75,14 @@ public class HudOverlay extends GuiComponent implements IIngameOverlay {
     public void postOverlay(RenderGameOverlayEvent.Post event)
     {
         if (event.getType() == RenderGameOverlayEvent.ElementType.ALL && needsPop) {
-            PoseStack matrixStack = event.getPoseStack();
-            matrixStack.popPose();
+            PoseStack poseStack = event.getPoseStack();
+            poseStack.popPose();
             needsPop = false;
         }
     }
 
     @Override
-    public void render(ForgeIngameGui gui, PoseStack matrixStack, float _partialTicks, int width, int height) {
+    public void render(ForgeIngameGui gui, PoseStack poseStack, float _partialTicks, int width, int height) {
         if (!canRender())
             return;
 
@@ -97,19 +98,30 @@ public class HudOverlay extends GuiComponent implements IIngameOverlay {
         // Draw player direction
         float yaw = Mth.lerp(partialTicks, player.yHeadRotO, player.yHeadRot) % 360;
         if (yaw < 0) yaw += 360;
-        String dir = getPlayerDirectionString(yaw);
-        drawString(matrixStack, font, dir, 3, 13, 0xffffffff);
+        String dir = getPlayerOrdinalDirection(yaw);
+        if (dir.length() < 2) dir += " ";
+        dir += String.format(" (%d°)", Mth.fastFloor(yaw));
+        drawString(poseStack, font, dir, 3, 13, 0xffffffff);
 
         // Draw FPS
-        // drawString(matrixStack, font, "FPS: " + mc.fpsString.substring(0, mc.fpsString.indexOf(' ')), 3, 23, 0xffffffff);
+        // drawString(poseStack, font, "FPS: " + mc.fpsString.substring(0, mc.fpsString.indexOf(' ')), 3, 23, 0xffffffff);
 
         // Draw player coordinates
         int playerPosX = player.getBlockX();
         int playerPosY = player.getBlockY();
         int playerPosZ = player.getBlockZ();
         String pos = String.format("XYZ: %d / %d / %d", playerPosX, playerPosY, playerPosZ);
-        // fill(matrixStack, 2, 12, font.width(pos) + 4, 2, 0x3f000000);
-        drawString(matrixStack, font, pos, 3, 3, 0xffffffff);
+        // fill(poseStack, 2, 12, font.width(pos) + 4, 2, 0x3f000000);
+        drawString(poseStack, font, pos, 3, 3, 0xffffffff);
+
+        final Waypoint wp = waypointDatabase.waypointToTrack;
+        if (wp != null) {
+            int distanceToWaypoint = wp.getDistanceTo(playerPosX, playerPosY, playerPosZ);
+//            int headingToWaypoint = wp.getHeadingTo(yaw, playerPosX, playerPosZ);
+            drawCenteredString(poseStack, font, wp.name, width / 2, 3, 0xffffffff);
+            drawCenteredString(poseStack, font, String.format("Distance: %d blocks", distanceToWaypoint), width / 2, 13, 0xffffffff);
+//            drawCenteredString(poseStack, font, String.format("Head to: %d°", headingToWaypoint), width / 2, 23, 0xffffffff);
+        }
     }
 
     private boolean canRender() {
@@ -121,27 +133,30 @@ public class HudOverlay extends GuiComponent implements IIngameOverlay {
         return true;
     }
 
-    private static String getPlayerDirectionString(float yaw) {
+    private static String getPlayerOrdinalDirection(float yaw) {
         // Find a way to make this better, maybe show compass?
         String dir;
         if (yaw > 337.5f || yaw <= 22.5f) {
-            dir = "N ";
+            dir = "N";
         } else if (yaw > 22.5f && yaw <= 67.5f) {
             dir = "NE";
         } else if (yaw > 67.5f && yaw <= 112.5f) {
-            dir = "E ";
+            dir = "E";
         } else if (yaw > 112.5f && yaw <= 157.5f) {
             dir = "SE";
         } else if (yaw > 157.5f && yaw <= 202.5f) {
-            dir = "S ";
+            dir = "S";
         } else if (yaw > 202.5f && yaw <= 247.5f) {
             dir = "SW";
         } else if (yaw > 247.5f && yaw <= 292.5f) {
-            dir = "W ";
+            dir = "W";
         } else {
             dir = "NW";
         }
-        dir += String.format(" (%d°)", Mth.fastFloor(yaw));
         return dir;
+    }
+
+    public static HudOverlay getInstance() {
+        return INSTANCE;
     }
 }
