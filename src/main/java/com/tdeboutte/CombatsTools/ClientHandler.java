@@ -54,8 +54,8 @@ public class ClientHandler {
         if (keyAddWaypoint.consumeClick()) {
             if (mc.screen == null) {
                 mc.setScreen(new WaypointSaveScreen(
-                        mc.player.getBlockZ(),
-                        mc.player.getBlockZ(),
+                        mc.player.getBlockX(),
+                        mc.player.getBlockY(),
                         mc.player.getBlockZ(),
                         mc.player.level.dimension().location().getPath())
                 );
