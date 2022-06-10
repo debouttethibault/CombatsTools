@@ -1,6 +1,6 @@
 package com.tdeboutte.CombatsTools.waypoints;
 
-import net.minecraft.client.gui.components.ObjectSelectionList;
+import org.jetbrains.annotations.NotNull;
 
 public class Waypoint {
     public int x;
@@ -9,20 +9,12 @@ public class Waypoint {
     public String dimension;
     public String name;
 
-    public Waypoint(int x, int y, int z, String dim, String name) {
+    public Waypoint(int x, int y, int z, @NotNull String dim, @NotNull String name) {
         this.x = x;
         this.y = y;
         this.z = z;
         this.dimension = dim;
         this.name = name;
-    }
-
-    public Waypoint(int x, int y, int z, String dim) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.dimension = dim;
-        this.name = "";
     }
 
     @Override
