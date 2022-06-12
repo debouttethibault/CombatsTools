@@ -38,8 +38,6 @@ public class WaypointDatabase {
         if (waypoints.containsKey(key))
             return false;
 
-        this.waypointToTrack = waypoint;
-
         waypoints.put(key, waypoint);
         return true;
     }

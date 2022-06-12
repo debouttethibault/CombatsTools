@@ -28,11 +28,11 @@ public class CombatsTools {
         LOGGER.info("Hello from Combat's Tools!");
     }
 
-    private void clientSetup(FMLClientSetupEvent event) {
+    private void clientSetup(final FMLClientSetupEvent event) {
         ClientHandler.init();
     }
 
-    private void loadComplete(FMLLoadCompleteEvent event) {
+    private void loadComplete(final FMLLoadCompleteEvent event) {
         //noinspection deprecation
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
             ClientHandler.initKeybinds();

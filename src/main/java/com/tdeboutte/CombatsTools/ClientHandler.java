@@ -66,7 +66,12 @@ public class ClientHandler {
         }
         if (keyListWaypoints.consumeClick()) {
             if (mc.screen == null) {
-                mc.setScreen(new WaypointsListScreen());
+                mc.setScreen(new WaypointsListScreen(
+                        mc.player.getBlockX(),
+                        mc.player.getBlockY(),
+                        mc.player.getBlockZ(),
+                        mc.player.level.dimension().location().getPath())
+                );
             }
 
             //noinspection StatementWithEmptyBody
