@@ -1,9 +1,15 @@
 package com.tdeboutte.CombatsTools.waypoints.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.tdeboutte.CombatsTools.waypoints.WaypointDatabase;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class WaypointsListScreen extends Screen {
     private static final Logger LOGGER = LogManager.getLogger();
