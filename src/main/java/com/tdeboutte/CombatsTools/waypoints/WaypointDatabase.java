@@ -5,7 +5,11 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
+import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class WaypointDatabase {
@@ -56,6 +60,30 @@ public class WaypointDatabase {
             msg.append("\t - ").append(wp.name).append("\n");
         }
         LOGGER.debug(msg);
+    }
+
+    // Why xml? Because I'm lazy and I don't want to write a serializer for the waypoints.
+    public void persistToDisk(@NotNull String filePath) {
+        LOGGER.info("Persisting waypoints to {}", filePath);
+
+        try (XMLEncoder xmlEncoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(filePath)))) {
+            xmlEncoder.writeObject(waypoints.values());
+        } catch (Exception e) {
+            LOGGER.error("Failed to persist waypoints to {}", filePath, e);
+        }
+    }
+
+    public void loadFromDisk(@NotNull String filePath) {
+        LOGGER.info("Loading waypoints from {}", filePath);
+
+        waypoints.clear();
+        try (XMLDecoder xmlDecoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(filePath)))) {
+            //noinspection unchecked
+            Collection<Waypoint> wps = (Collection<Waypoint>) xmlDecoder.readObject();
+            waypoints.putAll(wps.stream().collect(Collectors.toMap(Waypoint::getName, wp -> wp)));
+        } catch (Exception e) {
+            LOGGER.error("Failed to load waypoints from {}", filePath, e);
+        }
     }
 
     public static WaypointDatabase getInstance() {
